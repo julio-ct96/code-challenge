@@ -42,4 +42,26 @@ describe('TodoService', () => {
       expect(first.id).not.toBe(second.id);
     });
   });
+
+  describe('toggleTodo', () => {
+    let id: string;
+
+    beforeEach(() => {
+      service.addTodo('Buy milk', Priority.HIGH);
+      id = service.todos()[0].id;
+    });
+
+    it('should mark an incomplete todo as completed', () => {
+      service.toggleTodo(id);
+
+      expect(service.todos()[0].completed).toBe(true);
+    });
+
+    it('should mark a completed todo as incomplete', () => {
+      service.toggleTodo(id);
+      service.toggleTodo(id);
+
+      expect(service.todos()[0].completed).toBe(false);
+    });
+  });
 });
