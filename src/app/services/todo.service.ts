@@ -20,7 +20,9 @@ export class TodoService {
   readonly todos = this.#todos.asReadonly();
 
   readonly filteredTodos = computed(() =>
-    this.#todos().filter(this.#filterStrategies[this.#filter()])
+    this.#todos()
+      .filter(this.#filterStrategies[this.#filter()])
+      .toSorted((a: Todo, b: Todo) => b.priority - a.priority)
   );
 
   addTodo(title: string, priority: Priority): void {
