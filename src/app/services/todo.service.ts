@@ -22,6 +22,7 @@ export class TodoService {
   readonly filteredTodos = computed(() =>
     this.#todos()
       .filter(this.#filterStrategies[this.#filter()])
+      //  uso aqui el toSorted() en vez de sort() para no mutar el array original
       .toSorted((a: Todo, b: Todo) => b.priority - a.priority)
   );
 
