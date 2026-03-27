@@ -64,4 +64,17 @@ describe('TodoService', () => {
       expect(service.todos()[0].completed).toBe(false);
     });
   });
+
+  describe('deleteTodo', () => {
+    it('should remove a todo by id', () => {
+      service.addTodo('Buy milk', Priority.HIGH);
+      service.addTodo('Walk dog', Priority.LOW);
+      const id = service.todos()[0].id;
+
+      service.deleteTodo(id);
+
+      expect(service.todos()).toHaveLength(1);
+      expect(service.todos()[0].title).toBe('Walk dog');
+    });
+  });
 });
