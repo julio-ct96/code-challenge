@@ -105,5 +105,13 @@ describe('TodoService', () => {
       expect(service.filteredTodos()).toHaveLength(1);
       expect(service.filteredTodos()[0].title).toBe('Walk dog');
     });
+
+    it('should sort todos by priority descending (HIGH first)', () => {
+      service.addTodo('Medium task', Priority.MEDIUM);
+      service.setFilter(TodoFilter.ALL);
+
+      const titles = service.filteredTodos().map(t => t.title);
+      expect(titles).toEqual(['Buy milk', 'Medium task', 'Walk dog']);
+    });
   });
 });
