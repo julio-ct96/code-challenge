@@ -1,9 +1,9 @@
-import {  Component, signal, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, effect, signal } from '@angular/core';
+
 
 @Component({
   selector: 'app-todo-list',
-  imports: [CommonModule],
+  imports: [], // En apps standalone no hace falta importar commonModule ya que no se va a usar las antiguas directivas ngFor, ngIf, etc...
   templateUrl: './todo-list.html',
 })
 export class TodoListComponent  {
