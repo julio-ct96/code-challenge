@@ -24,4 +24,8 @@ export class TodoService {
       )
     );
   }
+
+  deleteTodo(id: string): void {
+    this.#todos.update(todos => todos.filter(todo => todo.id !== id));
+  }
 }
