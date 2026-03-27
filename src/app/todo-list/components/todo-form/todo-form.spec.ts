@@ -34,4 +34,45 @@ describe('TodoForm', () => {
     const button = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
     expect(button).toBeTruthy();
   });
+
+  describe('validation', () => {
+    it('should disable submit button when title is empty', () => {
+      const button: HTMLButtonElement = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
+      expect(button.disabled).toBe(true);
+    });
+
+    it('should enable submit button when title is not empty', () => {
+      component.form.controls.title.setValue('Buy milk');
+      fixture.detectChanges();
+
+      const button: HTMLButtonElement = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
+      expect(button.disabled).toBe(false);
+    });
+
+    it('should disable submit button when title exceeds 60 characters', () => {
+      component.form.controls.title.setValue('a'.repeat(61));
+      fixture.detectChanges();
+
+      const button: HTMLButtonElement = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
+      expect(button.disabled).toBe(true);
+    });
+
+    it('should disable submit button when title is only whitespace', () => {
+      component.form.controls.title.setValue('   ');
+      fixture.detectChanges();
+
+      const button: HTMLButtonElement = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
+      expect(button.disabled).toBe(true);
+    });
+
+    it('should collapse multiple consecutive spaces into one', () => {
+      const input: HTMLInputElement = fixture.nativeElement.querySelector('[data-testid="todo-title-input"]');
+      input.value = 'Buy   milk';
+      input.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+
+      expect(input.value).toBe('Buy milk');
+      expect(component.form.controls.title.value).toBe('Buy milk');
+    });
+  });
 });
