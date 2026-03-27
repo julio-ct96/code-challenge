@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { Priority } from '@enums/Priority';
 import { Todo } from '@interfaces/Todo';
 
 // Dejo provide in root solo porque es una app pequeña, hay una unica instancia
@@ -8,4 +9,11 @@ import { Todo } from '@interfaces/Todo';
 export class TodoService {
   readonly #todos = signal<Todo[]>([]);
   readonly todos = this.#todos.asReadonly();
+
+  addTodo(title: string, priority: Priority): void {
+    this.#todos.update(todos => [
+      ...todos,
+      { id: crypto.randomUUID(), title, priority, completed: false },
+    ]);
+  }
 }
