@@ -16,4 +16,12 @@ export class TodoService {
       { id: crypto.randomUUID(), title, priority, completed: false },
     ]);
   }
+
+  toggleTodo(id: string): void {
+    this.#todos.update(todos =>
+      todos.map(todo =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  }
 }
