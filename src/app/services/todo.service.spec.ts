@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TodoService } from './todo.service';
 import { Priority } from '@enums/Priority';
+import { TodoFilter } from '@enums/TodoFilter';
 
 describe('TodoService', () => {
   let service: TodoService;
@@ -75,6 +76,34 @@ describe('TodoService', () => {
 
       expect(service.todos()).toHaveLength(1);
       expect(service.todos()[0].title).toBe('Walk dog');
+    });
+  });
+
+  describe('filteredTodos', () => {
+    beforeEach(() => {
+      service.addTodo('Buy milk', Priority.HIGH);
+      service.addTodo('Walk dog', Priority.LOW);
+      service.toggleTodo(service.todos()[0].id);
+    });
+
+    it('should return all todos when filter is ALL', () => {
+      service.setFilter(TodoFilter.ALL);
+
+      expect(service.filteredTodos()).toHaveLength(2);
+    });
+
+    it('should return only completed todos when filter is COMPLETED', () => {
+      service.setFilter(TodoFilter.COMPLETED);
+
+      expect(service.filteredTodos()).toHaveLength(1);
+      expect(service.filteredTodos()[0].title).toBe('Buy milk');
+    });
+
+    it('should return only pending todos when filter is PENDING', () => {
+      service.setFilter(TodoFilter.PENDING);
+
+      expect(service.filteredTodos()).toHaveLength(1);
+      expect(service.filteredTodos()[0].title).toBe('Walk dog');
     });
   });
 });
