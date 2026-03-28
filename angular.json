@@ -59,7 +59,12 @@
       "prefix": "app",
       "projectType": "application",
       "root": "",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "none",
+          "changeDetection": "OnPush"
+        }
+      },
       "sourceRoot": "src"
     }
   },
