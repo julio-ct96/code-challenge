@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TodoFormField } from '@enums/TodoFormField';
 import { TodoForm } from './todo-form';
 
 describe('TodoForm', () => {
@@ -41,7 +42,7 @@ describe('TodoForm', () => {
     });
 
     it('should enable submit button when title is not empty', () => {
-      component.form.controls.title.setValue('Buy milk');
+      component.form.controls[TodoFormField.TITLE].setValue('Buy milk');
       fixture.detectChanges();
 
       const button: HTMLButtonElement = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
@@ -49,7 +50,7 @@ describe('TodoForm', () => {
     });
 
     it('should disable submit button when title exceeds 60 characters', () => {
-      component.form.controls.title.setValue('a'.repeat(61));
+      component.form.controls[TodoFormField.TITLE].setValue('a'.repeat(61));
       fixture.detectChanges();
 
       const button: HTMLButtonElement = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
@@ -57,7 +58,7 @@ describe('TodoForm', () => {
     });
 
     it('should disable submit button when title is only whitespace', () => {
-      component.form.controls.title.setValue('   ');
+      component.form.controls[TodoFormField.TITLE].setValue('   ');
       fixture.detectChanges();
 
       const button: HTMLButtonElement = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
@@ -71,7 +72,7 @@ describe('TodoForm', () => {
       fixture.detectChanges();
 
       expect(input.value).toBe('Buy milk');
-      expect(component.form.controls.title.value).toBe('Buy milk');
+      expect(component.form.controls[TodoFormField.TITLE].value).toBe('Buy milk');
     });
   });
 });
