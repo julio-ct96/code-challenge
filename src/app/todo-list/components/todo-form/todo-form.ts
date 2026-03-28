@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MULTI_SPACE } from '@constants/multi-space';
-import { PriorityLabel } from '@enums/Priority';
+import { Priority, PriorityLabel } from '@enums/Priority';
 import { TodoFormField } from '@enums/TodoFormField';
 import { TodoFormValue } from '@interfaces/TodoFormValue';
 import { noWhitespaceOnly } from '@validators/no-whitespace-only';
@@ -24,10 +24,18 @@ export class TodoForm {
     label,
   }));
 
+  readonly addTodo = output<{ title: string; priority: Priority }>();
+
   readonly form: FormGroup<TodoFormValue> = this.#fb.group({
     [TodoFormField.TITLE]: ['', [Validators.required, Validators.maxLength(this.titleMaxLength), noWhitespaceOnly]],
     [TodoFormField.PRIORITY]: [DEFAULT_PRIORITY],
   });
+
+  onSubmit(): void {
+    if (this.form.invalid) return;
+    this.addTodo.emit(this.form.getRawValue());
+    this.form.reset();
+  }
 
   onTitleInput(event: Event): void {
     const input = event.target as HTMLInputElement;
