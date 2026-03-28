@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Priority } from '@enums/Priority';
 import { TodoFormField } from '@enums/TodoFormField';
+import { OutputRefSubscription } from '@angular/core';
 import { TodoForm } from './todo-form';
 
 describe('TodoForm', () => {
@@ -36,8 +38,13 @@ describe('TodoForm', () => {
   });
 
   describe('validation', () => {
+    let button: HTMLButtonElement;
+
+    beforeEach(() => {
+      button = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
+    });
+
     it('should disable submit button when title is empty', () => {
-      const button: HTMLButtonElement = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
       expect(button.disabled).toBe(true);
     });
 
@@ -45,7 +52,6 @@ describe('TodoForm', () => {
       component.form.controls[TodoFormField.TITLE].setValue('Buy milk');
       fixture.detectChanges();
 
-      const button: HTMLButtonElement = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
       expect(button.disabled).toBe(false);
     });
 
@@ -53,7 +59,6 @@ describe('TodoForm', () => {
       component.form.controls[TodoFormField.TITLE].setValue('a'.repeat(61));
       fixture.detectChanges();
 
-      const button: HTMLButtonElement = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
       expect(button.disabled).toBe(true);
     });
 
@@ -61,7 +66,6 @@ describe('TodoForm', () => {
       component.form.controls[TodoFormField.TITLE].setValue('   ');
       fixture.detectChanges();
 
-      const button: HTMLButtonElement = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
       expect(button.disabled).toBe(true);
     });
 
@@ -73,6 +77,46 @@ describe('TodoForm', () => {
 
       expect(input.value).toBe('Buy milk');
       expect(component.form.controls[TodoFormField.TITLE].value).toBe('Buy milk');
+    });
+  });
+
+  describe('submit', () => {
+    let sub: OutputRefSubscription;
+    let button: HTMLButtonElement;
+
+    beforeEach(() => {
+      button = fixture.nativeElement.querySelector('[data-testid="todo-submit"]');
+    });
+
+    afterEach(() => sub?.unsubscribe());
+
+    it('should emit addTodo with title and priority when form is submitted', () => {
+      const addSpy = vi.fn();
+      sub = component.addTodo.subscribe(addSpy);
+
+      component.form.controls[TodoFormField.TITLE].setValue('Buy milk');
+      fixture.detectChanges();
+      button.click();
+
+      expect(addSpy).toHaveBeenCalledWith({ title: 'Buy milk', priority: Priority.MEDIUM });
+    });
+
+    it('should reset form after successful submit', () => {
+      component.form.controls[TodoFormField.TITLE].setValue('Buy milk');
+      fixture.detectChanges();
+      button.click();
+
+      expect(component.form.controls[TodoFormField.TITLE].value).toBe('');
+      expect(component.form.controls[TodoFormField.PRIORITY].value).toBe(Priority.MEDIUM);
+    });
+
+    it('should not emit addTodo when form is invalid', () => {
+      const addSpy = vi.fn();
+      sub = component.addTodo.subscribe(addSpy);
+
+      button.click();
+
+      expect(addSpy).not.toHaveBeenCalled();
     });
   });
 });
