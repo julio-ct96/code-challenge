@@ -1,7 +1,7 @@
 <form [formGroup]="form" class="flex items-center gap-4 p-2">
   <input
     type="text"
-    formControlName="title"
+    [formControlName]="field.TITLE"
     data-testid="todo-title-input"
     placeholder="New task..."
     aria-label="Task title"
@@ -11,7 +11,7 @@
   />
 
   <select
-    formControlName="priority"
+    [formControlName]="field.PRIORITY"
     data-testid="todo-priority-select"
     aria-label="Task priority"
     class="rounded border px-3 py-1.5"
