@@ -5,6 +5,8 @@
     data-testid="todo-title-input"
     placeholder="New task..."
     aria-label="Task title"
+    [attr.maxlength]="titleMaxLength"
+    (input)="onTitleInput($event)"
     class="flex-1 rounded border px-3 py-1.5"
   />
 
@@ -22,6 +24,7 @@
   <button
     type="submit"
     data-testid="todo-submit"
+    [disabled]="form.invalid"
     class="rounded bg-blue-500 px-4 py-1.5 text-white hover:bg-blue-600 disabled:opacity-50"
   >
     Add
