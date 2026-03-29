@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
 import { TodoFilter as TodoFilterEnum } from '@enums/TodoFilter';
 
@@ -15,7 +15,12 @@ import { TodoFilter as TodoFilterEnum } from '@enums/TodoFilter';
 })
 export class TodoFilter {
   readonly activeFilter = input<TodoFilterEnum>(TodoFilterEnum.ALL);
+  readonly filterChange = output<TodoFilterEnum>();
   readonly filters: TodoFilterEnum[] = Object.values(TodoFilterEnum);
+
+  onFilterClick(filter: TodoFilterEnum): void {
+    this.filterChange.emit(filter);
+  }
 
   readonly activeStates = computed(() => {
     const active = this.activeFilter();
