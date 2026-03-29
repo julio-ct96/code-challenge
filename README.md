@@ -73,3 +73,15 @@ Creando componentes me canse de poner a mano el OnPush y lo configure en el angu
 El proceso red green se puede ver en los commits y las ramas dedicadas.
 
 En el angular.json faltan los budgets de tamaño para los paquetes pero no me ha parecido relevante agregarlos, al igual que tmpoco quitar el useDefineForClassFields que es legacy, no se si stackblitz lo usa para algo o que cosa. 
+
+## Mejoras futuras
+
+- Editar todo inline
+- Modificar el prioridad del todo inline
+- Mostrar errores de validacion 
+- Confirmacion antes de eliminar
+- Deshacer accion despues de eliminar via snackbar
+- Contador de caracteres visible
+- Filtro por texto
+- Filtro por prioridad
+- Si la lista crece mucho, paginacion normal o hacer scroll infinito con virtual scroll
