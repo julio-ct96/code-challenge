@@ -3,6 +3,12 @@
 <app-todo-form data-testid="todo-form" (addTodo)="onAddTodo($event)" />
 <app-todo-filter data-testid="todo-filter" [activeFilter]="activeFilter()" (filterChange)="onFilterChange($event)" />
 
-@for (todo of filteredTodos(); track todo.id + todo.title) {
-  <app-todo-item data-testid="todo-item" [todo]="todo" (toggle)="onToggle($event)" (delete)="onDelete($event)" />
+@if (isLoadingTodos()) {
+  <p data-testid="loading-indicator">Loading todos...</p>
+} @else if (todosError()) {
+  <p data-testid="error-message">{{ todosError() }}</p>
+} @else {
+  @for (todo of filteredTodos(); track todo.id + todo.title) {
+    <app-todo-item data-testid="todo-item" [todo]="todo" (toggle)="onToggle($event)" (delete)="onDelete($event)" />
+  }
 }
