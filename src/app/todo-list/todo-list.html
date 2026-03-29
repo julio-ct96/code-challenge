@@ -9,6 +9,11 @@
   <app-todo-filter data-testid="todo-filter" [activeFilter]="activeFilter()" (filterChange)="onFilterChange($event)" />
 
   <ul role="list" class="flex-1 min-h-0 overflow-y-auto pr-4">
+    <!-- 
+    Aqui uso el track con el id + title porque el titulo puede cambiar pero el ID no, por lo tanto, si mantenemos la inmutabilidad
+    y no creamos nuevas referencias de los objetos, el track con el id seria insuficiente para identificar un todo si agregaramos la opcion
+    de modificar el titulo de un todo, ya que el track se basa en el valor de la propiedad y no en la referencia del objeto
+    -->
     @for (todo of filteredTodos(); track todo.id + todo.title) {
       <app-todo-item data-testid="todo-item" [todo]="todo" (toggle)="onToggle($event)" (delete)="onDelete($event)" />
     } @empty {
