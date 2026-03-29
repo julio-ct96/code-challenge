@@ -110,8 +110,20 @@ describe('TodoService', () => {
       service.addTodo('Medium task', Priority.MEDIUM);
       service.setFilter(TodoFilter.ALL);
 
-      const titles = service.filteredTodos().map(t => t.title);
+      const titles = service.filteredTodos().map(todo => todo.title);
       expect(titles).toEqual(['Buy milk', 'Medium task', 'Walk dog']);
+    });
+  });
+
+  describe('filter', () => {
+    it('should expose the current filter as a readonly signal', () => {
+      expect(service.filter()).toBe(TodoFilter.ALL);
+    });
+
+    it('should update when setFilter is called', () => {
+      service.setFilter(TodoFilter.COMPLETED);
+
+      expect(service.filter()).toBe(TodoFilter.COMPLETED);
     });
   });
 });
