@@ -1,3 +1,4 @@
+import { OutputRefSubscription } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TodoFilter as TodoFilterEnum } from '@enums/TodoFilter';
 import { TodoFilter } from './todo-filter';
@@ -27,7 +28,7 @@ describe('TodoFilter', () => {
   });
 
   it('should render buttons with correct labels', () => {
-    const labels = Array.from(buttons).map(b => b.textContent?.trim());
+    const labels = Array.from(buttons).map(button => button.textContent?.trim());
     expect(labels).toEqual(['All', 'Completed', 'Pending']);
   });
 
@@ -36,7 +37,34 @@ describe('TodoFilter', () => {
     fixture.detectChanges();
     buttons = fixture.nativeElement.querySelectorAll('[data-testid="filter-button"]');
 
-    const activeButton = Array.from(buttons).find(b => b.textContent?.trim() === 'Completed');
+    const activeButton = Array.from(buttons).find(button => button.textContent?.trim() === 'Completed');
     expect(activeButton?.getAttribute('aria-pressed')).toBe('true');
+  });
+
+  describe('filterChange output', () => {
+    let emittedFilter: TodoFilterEnum | undefined;
+    let sub: OutputRefSubscription;
+
+    afterEach(() => sub?.unsubscribe());
+
+    it('should emit the selected filter when a button is clicked', () => {
+      sub = component.filterChange.subscribe(value => (emittedFilter = value));
+
+      const pendingButton = Array.from(buttons).find(button => button.textContent?.trim() === 'Pending');
+      expect(pendingButton).toBeTruthy();
+      pendingButton?.click();
+
+      expect(emittedFilter).toBe(TodoFilterEnum.PENDING);
+    });
+
+    it('should emit when clicking the already active filter', () => {
+      sub = component.filterChange.subscribe(value => (emittedFilter = value));
+
+      const allButton = Array.from(buttons).find(button => button.textContent?.trim() === 'All');
+      expect(allButton).toBeTruthy();
+      allButton?.click();
+
+      expect(emittedFilter).toBe(TodoFilterEnum.ALL);
+    });
   });
 });
