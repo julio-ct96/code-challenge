@@ -1,14 +1,20 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, linkedSignal, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TodoApi } from '@api/services/todo-api';
 import { Priority } from '@enums/Priority';
 import { TodoFilter } from '@enums/TodoFilter';
 import { Todo } from '@interfaces/Todo';
 
 // Dejo provide in root solo porque es una app pequeña, hay una unica instancia
-// de la ruta TodoList. En una app real, lo ideal seria proveerlo en el componente 
+// de la ruta TodoList. En una app real, lo ideal seria proveerlo en el componente
 // para que el estado solamente viva en ese "modulo" o componente
 @Injectable({ providedIn: 'root' })
 export class TodoService {
-  readonly #todos = signal<Todo[]>([]);
+  readonly #todoApi = inject(TodoApi);
+
+  readonly #apiResponse = toSignal(this.#todoApi.loadTodos(), { requireSync: true });
+
+  readonly #todos = linkedSignal(() => this.#apiResponse().data);
   readonly #filter = signal<TodoFilter>(TodoFilter.ALL);
 
   readonly #filterStrategies: Record<TodoFilter, (todo: Todo) => boolean> = {
@@ -19,6 +25,8 @@ export class TodoService {
 
   readonly todos = this.#todos.asReadonly();
   readonly filter = this.#filter.asReadonly();
+  readonly isLoadingTodos = computed(() => this.#apiResponse().isLoading);
+  readonly todosError = computed(() => this.#apiResponse().error);
 
   readonly filteredTodos = computed(() =>
     this.#todos()

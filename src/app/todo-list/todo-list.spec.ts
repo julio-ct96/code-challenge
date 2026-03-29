@@ -2,7 +2,11 @@ import { DebugElement } from '@angular/core';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { of } from 'rxjs';
+import { TodoApi } from '@api/services/todo-api';
 import { TodoFilter as TodoFilterEnum } from '@enums/TodoFilter';
+import { Todo } from '@interfaces/Todo';
+import { buildApiResponseMock } from '@mocks/api-response';
 import { buildTodoFormPayloadMock } from '@mocks/todo-form-payload';
 import { TodoService } from '@services/todo.service';
 import { TodoFilter } from './components/todo-filter/todo-filter';
@@ -18,6 +22,9 @@ describe('TodoListComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TodoListComponent],
+      providers: [
+        { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(buildApiResponseMock<Todo[]>()) }) },
+      ],
     });
 
     service = TestBed.inject(TodoService);
@@ -111,6 +118,51 @@ describe('TodoListComponent', () => {
 
       const items = fixture.nativeElement.querySelectorAll('[data-testid="todo-item"]');
       expect(items.length).toBe(0);
+    });
+  });
+
+  describe('loading state', () => {
+    it('should show loading indicator when todos are loading', () => {
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [TodoListComponent],
+        providers: [
+          { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(buildApiResponseMock<Todo[]>({ isLoading: true })) }) },
+        ],
+      });
+      const loadingFixture = TestBed.createComponent(TodoListComponent);
+      loadingFixture.detectChanges();
+
+      const loading = loadingFixture.nativeElement.querySelector('[data-testid="loading-indicator"]');
+      expect(loading).toBeTruthy();
+    });
+
+    it('should hide loading indicator when todos are loaded', () => {
+      const loading = fixture.nativeElement.querySelector('[data-testid="loading-indicator"]');
+      expect(loading).toBeFalsy();
+    });
+  });
+
+  describe('error state', () => {
+    it('should show error message when todosError is set', () => {
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        imports: [TodoListComponent],
+        providers: [
+          { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(buildApiResponseMock<Todo[]>({ error: 'Error loading todos' })) }) },
+        ],
+      });
+      const errorFixture = TestBed.createComponent(TodoListComponent);
+      errorFixture.detectChanges();
+
+      const error = errorFixture.nativeElement.querySelector('[data-testid="error-message"]');
+      expect(error).toBeTruthy();
+      expect(error.textContent).toContain('Error loading todos');
+    });
+
+    it('should hide error message when there is no error', () => {
+      const error = fixture.nativeElement.querySelector('[data-testid="error-message"]');
+      expect(error).toBeFalsy();
     });
   });
 
