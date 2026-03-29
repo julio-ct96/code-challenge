@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { TodoFilter as TodoFilterEnum } from '@enums/TodoFilter';
+import { TodoFormPayload } from '@interfaces/TodoFormPayload';
 import { TodoService } from '@services/todo.service';
 import { TodoFilter } from './components/todo-filter/todo-filter';
 import { TodoForm } from './components/todo-form/todo-form';
@@ -18,6 +19,10 @@ export class TodoListComponent {
   readonly todos = this.#todoService.todos;
   readonly filteredTodos = this.#todoService.filteredTodos;
   readonly activeFilter = this.#todoService.filter;
+
+  onAddTodo(payload: TodoFormPayload): void {
+    this.#todoService.addTodo(payload.title, payload.priority);
+  }
 
   readonly heading = computed(() => {
     const filtered = this.filteredTodos().length;
