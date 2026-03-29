@@ -24,6 +24,8 @@ export class TodoFilter {
     this.filterChange.emit(filter);
   }
 
+  // normalmente un .map no es lo mas optimo en un computed, pero en este caso 
+  // el array de filtros es pequeño y estatico
   readonly activeStates = computed(() => {
     const active = this.activeFilter();
     return Object.fromEntries(this.filters.map(filter => [filter, filter === active])) as Record<TodoFilterEnum, boolean>;
