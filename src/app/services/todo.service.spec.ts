@@ -1,23 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { of } from 'rxjs';
-import { ApiResponse } from '@api/interfaces/ApiResponse';
 import { TodoApi } from '@api/services/todo-api';
 import { Priority } from '@enums/Priority';
 import { TodoFilter } from '@enums/TodoFilter';
 import { Todo } from '@interfaces/Todo';
+import { buildApiResponseMock } from '@mocks/api-response';
 import { buildTodoMock } from '@mocks/todo';
 import { TodoService } from './todo.service';
 
 describe('TodoService', () => {
   let service: TodoService;
 
-  const emptyResponse: ApiResponse<Todo[]> = { data: [], isLoading: false, error: null };
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
-        { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(emptyResponse) }) },
+        { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(buildApiResponseMock<Todo[]>()) }) },
       ],
     });
     service = TestBed.inject(TodoService);
@@ -144,15 +142,14 @@ describe('TodoService', () => {
       buildTodoMock({ id: '2', title: 'Walk the dog', completed: true, priority: Priority.MEDIUM }),
     ];
 
-    const successResponse: ApiResponse<Todo[]> = { data: mockApiTodos, isLoading: false, error: null };
-    const loadingResponse: ApiResponse<Todo[]> = { data: [], isLoading: true, error: null };
-    const errorResponse: ApiResponse<Todo[]> = { data: [], isLoading: false, error: 'Error loading todos' };
-
     it('should populate todos from API response declaratively', () => {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
         providers: [
-          { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(loadingResponse, successResponse) }) },
+          { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(
+            buildApiResponseMock<Todo[]>({ isLoading: true }),
+            buildApiResponseMock<Todo[]>({ data: mockApiTodos }),
+          ) }) },
         ],
       });
       const apiService = TestBed.inject(TodoService);
@@ -165,7 +162,7 @@ describe('TodoService', () => {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
         providers: [
-          { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(successResponse) }) },
+          { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(buildApiResponseMock<Todo[]>()) }) },
         ],
       });
       const apiService = TestBed.inject(TodoService);
@@ -177,7 +174,10 @@ describe('TodoService', () => {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
         providers: [
-          { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(loadingResponse, errorResponse) }) },
+          { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(
+            buildApiResponseMock<Todo[]>({ isLoading: true }),
+            buildApiResponseMock<Todo[]>({ error: 'Error loading todos' }),
+          ) }) },
         ],
       });
       const apiService = TestBed.inject(TodoService);
@@ -189,7 +189,10 @@ describe('TodoService', () => {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
         providers: [
-          { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(loadingResponse, errorResponse) }) },
+          { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(
+            buildApiResponseMock<Todo[]>({ isLoading: true }),
+            buildApiResponseMock<Todo[]>({ error: 'Error loading todos' }),
+          ) }) },
         ],
       });
       const apiService = TestBed.inject(TodoService);
