@@ -2,6 +2,8 @@
   <input
     type="text"
     [formControlName]="field.TITLE"
+    [id]="field.TITLE"
+    [name]="field.TITLE"
     data-testid="todo-title-input"
     placeholder="New task..."
     aria-label="Task title"
@@ -12,6 +14,8 @@
 
   <select
     [formControlName]="field.PRIORITY"
+    [id]="field.PRIORITY"
+    [name]="field.PRIORITY"
     data-testid="todo-priority-select"
     aria-label="Task priority"
     class="rounded border px-3 py-1.5"
