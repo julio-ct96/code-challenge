@@ -20,10 +20,6 @@ export class TodoListComponent {
   readonly filteredTodos = this.#todoService.filteredTodos;
   readonly activeFilter = this.#todoService.filter;
 
-  onAddTodo(payload: TodoFormPayload): void {
-    this.#todoService.addTodo(payload.title, payload.priority);
-  }
-
   readonly heading = computed(() => {
     const filtered = this.filteredTodos().length;
     const total = this.todos().length;
@@ -34,4 +30,12 @@ export class TodoListComponent {
       [TodoFilterEnum.PENDING]: `${filtered} pending things I have to do (${total} total)`,
     }[this.activeFilter()];
   });
+
+  onAddTodo(payload: TodoFormPayload): void {
+    this.#todoService.addTodo(payload.title, payload.priority);
+  }
+
+  onToggle(id: string): void {
+    this.#todoService.toggleTodo(id);
+  }
 }

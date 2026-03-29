@@ -4,5 +4,5 @@
 <app-todo-filter data-testid="todo-filter" [activeFilter]="activeFilter()" />
 
 @for (todo of filteredTodos(); track todo.id + todo.title) {
-  <app-todo-item data-testid="todo-item" [todo]="todo" />
+  <app-todo-item data-testid="todo-item" [todo]="todo" (toggle)="onToggle($event)" />
 }
