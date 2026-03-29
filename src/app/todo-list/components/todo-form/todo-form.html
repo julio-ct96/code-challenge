@@ -1,0 +1,32 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex items-center gap-4 p-2">
+  <input
+    type="text"
+    [formControlName]="field.TITLE"
+    data-testid="todo-title-input"
+    placeholder="New task..."
+    aria-label="Task title"
+    [attr.maxlength]="titleMaxLength"
+    (input)="onTitleInput($event)"
+    class="flex-1 rounded border px-3 py-1.5"
+  />
+
+  <select
+    [formControlName]="field.PRIORITY"
+    data-testid="todo-priority-select"
+    aria-label="Task priority"
+    class="rounded border px-3 py-1.5"
+  >
+    @for (option of priorityOptions; track option.value) {
+      <option [ngValue]="option.value">{{ option.label }}</option>
+    }
+  </select>
+
+  <button
+    type="submit"
+    data-testid="todo-submit"
+    [disabled]="form.invalid"
+    class="rounded bg-blue-500 px-4 py-1.5 text-white hover:bg-blue-600 disabled:opacity-50"
+  >
+    Add
+  </button>
+</form>

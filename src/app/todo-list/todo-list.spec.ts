@@ -1,17 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DebugElement } from '@angular/core';
 import { beforeEach, describe, expect, it } from 'vitest';
-
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { TodoFilter as TodoFilterEnum } from '@enums/TodoFilter';
+import { buildTodoFormPayloadMock } from '@mocks/todo-form-payload';
+import { TodoService } from '@services/todo.service';
+import { TodoFilter } from './components/todo-filter/todo-filter';
+import { TodoForm } from './components/todo-form/todo-form';
+import { TodoItemComponent } from './components/todo-item/todo-item';
 import { TodoListComponent } from './todo-list';
 
 describe('TodoListComponent', () => {
   let component: TodoListComponent;
   let fixture: ComponentFixture<TodoListComponent>;
+  let service: TodoService;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [TodoListComponent],
-    }).compileComponents();
+    });
 
+    service = TestBed.inject(TodoService);
     fixture = TestBed.createComponent(TodoListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -21,27 +30,106 @@ describe('TodoListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should contain tasks', () => {
-    const todoListElement = document.querySelector('#todoList');
+  describe('rendering', () => {
+    it('should render the todo form', () => {
+      const form = fixture.nativeElement.querySelector('[data-testid="todo-form"]');
+      expect(form).toBeTruthy();
+    });
 
-    expect(todoListElement!.children.length).toBeGreaterThan(0);
+    it('should render the todo filter', () => {
+      const filter = fixture.nativeElement.querySelector('[data-testid="todo-filter"]');
+      expect(filter).toBeTruthy();
+    });
+
+    it('should render no todo items when list is empty', () => {
+      const items = fixture.nativeElement.querySelectorAll('[data-testid="todo-item"]');
+      expect(items.length).toBe(0);
+    });
   });
 
-  it('should toggle test class when clicked', () => {
-    const todoTaskElement = document.querySelector('#todoList>li');
+  describe('addTodo wiring', () => {
+    let formDebugElement: DebugElement;
 
-    component.toggleClass(
-      { currentTarget: todoTaskElement } as MouseEvent,
-      'test'
-    );
+    beforeEach(() => {
+      formDebugElement = fixture.debugElement.query(By.css('[data-testid="todo-form"]'));
+    });
 
-    expect(todoTaskElement!.className).toContain('test');
+    it('should add a todo and render it when form emits addTodo', () => {
+      const formComponent: TodoForm = formDebugElement.componentInstance;
+      formComponent.addTodo.emit(buildTodoFormPayloadMock());
+      fixture.detectChanges();
 
-    component.toggleClass(
-      { currentTarget: todoTaskElement } as MouseEvent,
-      'test'
-    );
+      expect(service.todos().length).toBe(1);
+      expect(service.todos()[0].title).toBe('Buy milk');
 
-    expect(todoTaskElement!.className).not.toContain('test');
+      const items = fixture.nativeElement.querySelectorAll('[data-testid="todo-item"]');
+      expect(items.length).toBe(1);
+    });
+  });
+
+  describe('toggleTodo wiring', () => {
+    let itemDebugElement: DebugElement;
+
+    beforeEach(() => {
+      const formComponent: TodoForm = fixture.debugElement.query(By.css('[data-testid="todo-form"]')).componentInstance;
+      formComponent.addTodo.emit(buildTodoFormPayloadMock());
+      fixture.detectChanges();
+      itemDebugElement = fixture.debugElement.query(By.css('[data-testid="todo-item"]'));
+    });
+
+    it('should toggle a todo when todo-item emits toggle', () => {
+      const itemComponent: TodoItemComponent = itemDebugElement.componentInstance;
+
+      expect(service.todos()[0].completed).toBe(false);
+
+      itemComponent.toggle.emit(service.todos()[0].id);
+      fixture.detectChanges();
+
+      expect(service.todos()[0].completed).toBe(true);
+    });
+  });
+
+  describe('deleteTodo wiring', () => {
+    let itemDebugElement: DebugElement;
+
+    beforeEach(() => {
+      const formComponent: TodoForm = fixture.debugElement.query(By.css('[data-testid="todo-form"]')).componentInstance;
+      formComponent.addTodo.emit(buildTodoFormPayloadMock());
+      fixture.detectChanges();
+      itemDebugElement = fixture.debugElement.query(By.css('[data-testid="todo-item"]'));
+    });
+
+    it('should delete a todo when todo-item emits delete', () => {
+      const itemComponent: TodoItemComponent = itemDebugElement.componentInstance;
+
+      expect(service.todos().length).toBe(1);
+
+      itemComponent.delete.emit(service.todos()[0].id);
+      fixture.detectChanges();
+
+      expect(service.todos().length).toBe(0);
+
+      const items = fixture.nativeElement.querySelectorAll('[data-testid="todo-item"]');
+      expect(items.length).toBe(0);
+    });
+  });
+
+  describe('filterChange wiring', () => {
+    let filterDebugElement: DebugElement;
+
+    beforeEach(() => {
+      filterDebugElement = fixture.debugElement.query(By.css('[data-testid="todo-filter"]'));
+    });
+
+    it('should update service filter when filter emits filterChange', () => {
+      const filterComponent: TodoFilter = filterDebugElement.componentInstance;
+
+      expect(service.filter()).toBe(TodoFilterEnum.ALL);
+
+      filterComponent.filterChange.emit(TodoFilterEnum.COMPLETED);
+      fixture.detectChanges();
+
+      expect(service.filter()).toBe(TodoFilterEnum.COMPLETED);
+    });
   });
 });
