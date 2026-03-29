@@ -8,6 +8,9 @@ import { Todo } from '@interfaces/Todo';
 // Dejo provide in root solo porque es una app pequeña, hay una unica instancia
 // de la ruta TodoList. En una app real, lo ideal seria proveerlo en el componente
 // para que el estado solamente viva en ese "modulo" o componente
+// hace poco agregaron una propiedad experimental para poder poner tambien los providers
+// a nivel de fichero de rutas, esto va a ser bastante potente porque evita en algunos casos
+// tener componentes wrappers solamente para tener que compartir un estado aislado
 @Injectable({ providedIn: 'root' })
 export class TodoService {
   readonly #todoApi = inject(TodoApi);
