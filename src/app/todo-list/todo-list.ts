@@ -12,6 +12,7 @@ import { TodoItemComponent } from './components/todo-item/todo-item';
   imports: [TodoForm, TodoFilter, TodoItemComponent],
   templateUrl: './todo-list.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'flex flex-col w-full max-w-2xl flex-1 min-h-0' },
 })
 export class TodoListComponent {
   readonly #todoService = inject(TodoService);
