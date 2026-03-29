@@ -9,9 +9,16 @@ import { TodoItemComponent } from './components/todo-item/todo-item';
 @Component({
   selector: 'app-todo-list',
   // En apps standalone no hace falta importar commonModule ya que no se va a usar las antiguas directivas ngFor, ngIf, etc...
+  // @if o @for no necesita ningun import y la direccion del equipo de angular es eliminar el commonmodule
   imports: [TodoForm, TodoFilter, TodoItemComponent],
   templateUrl: './todo-list.html',
+  // la deteccion de cambios onPush es un MUST si quieres que la app tenga buen rendimiento
+  // obviamente tambien es necesario conocer como funciona la deteccion de cambios
+  // y crear nuevas referencias solamente cuando se es necesario para no impactar el rendimiento en renderizar de nuevo
+  // componentes que no estan impactados por X cambio de en la UI
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // utilizo el atributo host para evitar wrappers innecesarios en el dom
+  // y poder aplicar estilos directamente al componente
   host: { role: 'main', class: 'flex flex-col w-full max-w-2xl flex-1 min-h-0' },
 })
 export class TodoListComponent {
@@ -23,6 +30,8 @@ export class TodoListComponent {
   readonly isLoadingTodos = this.#todoService.isLoadingTodos;
   readonly todosError = this.#todoService.todosError;
 
+  // utilizo computed para mantener el html lo mas limpio posible de logica
+  // y que el componente sea mas declarativo
   readonly heading = computed(() => {
     const filtered = this.filteredTodos().length;
     const total = this.todos().length;
