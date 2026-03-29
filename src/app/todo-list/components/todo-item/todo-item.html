@@ -21,9 +21,9 @@
 
   <span
     data-testid="priority-badge"
-    [attr.aria-label]="'Priority: ' + priorityLabel()"
     class="rounded px-2 py-0.5 text-xs font-semibold"
   >
+    <span class="sr-only">Priority:</span>
     {{ priorityLabel() }}
   </span>
 
