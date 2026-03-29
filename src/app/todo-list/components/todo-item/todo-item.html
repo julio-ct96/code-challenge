@@ -1,5 +1,5 @@
 <li class="flex items-center gap-4 p-2" role="listitem">
-  <label class="flex items-center gap-2 flex-1 hover:cursor-pointer">
+  <label class="flex items-center gap-2 flex-1 min-w-0 hover:cursor-pointer">
     <input
       type="checkbox"
       data-testid="todo-checkbox"
@@ -11,8 +11,10 @@
 
     <span
       data-testid="todo-title"
+      class="truncate max-w-[90%]"
       [class.line-through]="todo().completed"
       [class.text-gray-400]="todo().completed"
+      [title]="todo().title"
     >
       {{ todo().title }}
     </span>
