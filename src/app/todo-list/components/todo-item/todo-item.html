@@ -1,5 +1,4 @@
-<li class="flex items-center gap-4 p-2" role="listitem">
-  <label class="flex items-center gap-2 flex-1 min-w-0 hover:cursor-pointer">
+<label class="flex items-center gap-2 flex-1 min-w-0 hover:cursor-pointer">
     <input
       type="checkbox"
       data-testid="todo-checkbox"
@@ -22,9 +21,9 @@
 
   <span
     data-testid="priority-badge"
-    [attr.aria-label]="'Priority: ' + priorityLabel()"
     class="rounded px-2 py-0.5 text-xs font-semibold"
   >
+    <span class="sr-only">Priority:</span>
     {{ priorityLabel() }}
   </span>
 
@@ -36,4 +35,3 @@
   >
     ✕
   </button>
-</li>
