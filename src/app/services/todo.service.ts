@@ -18,6 +18,7 @@ export class TodoService {
   };
 
   readonly todos = this.#todos.asReadonly();
+  readonly filter = this.#filter.asReadonly();
 
   readonly filteredTodos = computed(() =>
     this.#todos()
