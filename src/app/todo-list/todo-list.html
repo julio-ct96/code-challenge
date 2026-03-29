@@ -2,7 +2,7 @@
 
 @if (isLoadingTodos()) {
   <!-- 
-    Los atributos aria-live son para que los lectores de pantalla anuncien el cambio de contenido
+    Los atributos aria-live son para que los lectores de pantalla anuncien el cambio de contenido, importante en cambios de estado asincronos
   -->
   <p data-testid="loading-indicator" aria-live="polite" class="text-center text-gray-500 py-8">Loading todos...</p>
 } @else if (todosError()) {
