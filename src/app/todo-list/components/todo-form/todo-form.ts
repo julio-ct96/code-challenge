@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MULTI_SPACE } from '@constants/multi-space';
-import { Priority, PriorityLabel } from '@enums/Priority';
+import { PriorityLabel } from '@enums/Priority';
 import { TodoFormField } from '@enums/TodoFormField';
+import { TodoFormPayload } from '@interfaces/TodoFormPayload';
 import { TodoFormValue } from '@interfaces/TodoFormValue';
 import { noWhitespaceOnly } from '@validators/no-whitespace-only';
 import { DEFAULT_PRIORITY } from '../../constants/default-priority';
@@ -24,7 +25,7 @@ export class TodoForm {
     label,
   }));
 
-  readonly addTodo = output<{ title: string; priority: Priority }>();
+  readonly addTodo = output<TodoFormPayload>();
 
   readonly form: FormGroup<TodoFormValue> = this.#fb.group({
     [TodoFormField.TITLE]: ['', [Validators.required, Validators.maxLength(this.titleMaxLength), noWhitespaceOnly]],
