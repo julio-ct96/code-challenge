@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { TitleCasePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { TodoFilter as TodoFilterEnum } from '@enums/TodoFilter';
 
+// Este componente podria ser generico, recibiendo por input el enum de filtros y el filtro activo pero por simpleza lo hice asi
+// tampoco me di cuenta porque me centre en el tdd
 @Component({
   selector: 'app-todo-filter',
   imports: [TitleCasePipe],
@@ -22,6 +24,8 @@ export class TodoFilter {
     this.filterChange.emit(filter);
   }
 
+  // normalmente un .map no es lo mas optimo en un computed, pero en este caso 
+  // el array de filtros es pequeño y estatico
   readonly activeStates = computed(() => {
     const active = this.activeFilter();
     return Object.fromEntries(this.filters.map(filter => [filter, filter === active])) as Record<TodoFilterEnum, boolean>;

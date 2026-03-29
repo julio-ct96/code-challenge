@@ -4,7 +4,7 @@
       data-testid="todo-checkbox"
       [checked]="todo().completed"
       (click)="onToggle($event)"
-      [attr.aria-label]="'Mark ' + todo().title + ' as ' + (todo().completed ? 'pending' : 'completed')"
+      [attr.aria-label]="toggleLabel()"
       class="hover:cursor-pointer"
     />
 
@@ -23,6 +23,9 @@
     data-testid="priority-badge"
     class="rounded px-2 py-0.5 text-xs font-semibold"
   >
+    <!-- 
+      sr-only, ocultar el texto pero mantenerlo para lectores de pantalla
+    -->
     <span class="sr-only">Priority:</span>
     {{ priorityLabel() }}
   </span>
@@ -30,7 +33,7 @@
   <button
     data-testid="todo-delete"
     (click)="onDelete()"
-    [attr.aria-label]="'Delete ' + todo().title"
+    [attr.aria-label]="deleteLabel()"
     class="hover:cursor-pointer text-red-500 hover:text-red-700"
   >
     ✕

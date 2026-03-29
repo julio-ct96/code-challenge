@@ -15,6 +15,8 @@ export class TodoItemComponent {
   readonly delete = output<string>();
 
   readonly priorityLabel = computed(() => PriorityLabel[this.todo().priority]);
+  readonly toggleLabel = computed(() => `Mark ${this.todo().title} as ${this.todo().completed ? 'pending' : 'completed'}`);
+  readonly deleteLabel = computed(() => `Delete ${this.todo().title}`);
 
   onToggle(event: Event): void {
     event.preventDefault();

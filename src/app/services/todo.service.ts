@@ -8,12 +8,23 @@ import { Todo } from '@interfaces/Todo';
 // Dejo provide in root solo porque es una app pequeña, hay una unica instancia
 // de la ruta TodoList. En una app real, lo ideal seria proveerlo en el componente
 // para que el estado solamente viva en ese "modulo" o componente
+// hace poco agregaron una propiedad experimental para poder poner tambien los providers
+// a nivel de fichero de rutas, esto va a ser bastante potente porque evita en algunos casos
+// tener componentes wrappers solamente para tener que compartir un estado aislado
 @Injectable({ providedIn: 'root' })
 export class TodoService {
   readonly #todoApi = inject(TodoApi);
 
+  // Aqui uso toSignal para convertir el Observable de la API en un Signal y que maneje la sub automaticamente
+  // y uso requireSync porque la API devuelve siempre ApiResponse 
+  // ademas esto es clave para un flujo declarativo y reactivo moderno
   readonly #apiResponse = toSignal(this.#todoApi.loadTodos(), { requireSync: true });
 
+  // aqui uso linkedSignal porque necesito un estado que se pueda sobreescribir
+  // y que ademas se sincronoce automaticamente cuando la API responda con datos nuevos 
+  // en caso de tener que rehacer llamadas otra vez
+  // hacer esto me ha permitido tener impacto 0 en el componente que consumia los todos
+  // la integracion con la api no ha impactado a la capa del componente 
   readonly #todos = linkedSignal(() => this.#apiResponse().data);
   readonly #filter = signal<TodoFilter>(TodoFilter.ALL);
 

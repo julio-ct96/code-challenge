@@ -16,20 +16,27 @@ import { TITLE_MAX_LENGTH } from '../../constants/title-max-length';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoForm {
+  // aqui aun no utilizo los nuevos formularios con signals porque no son estables
   readonly #fb = inject(NonNullableFormBuilder);
+
+  readonly addTodo = output<TodoFormPayload>();
+
   protected readonly titleMaxLength = TITLE_MAX_LENGTH;
+
+  // me gusta usar este patron de utilizar un enum para los nombres de los campos del formulario
+  // para asegurar la robustez, si se cambia el nombre de un campo solo hay que modificar el enum
+  // y no en todos los lugares donde se utiliza, incluido el template
   protected readonly field = TodoFormField;
 
+  // este objeto es estatico por lo que no tiene sentido que sea un signal
   readonly priorityOptions = Object.entries(PriorityLabel).map(([value, label]) => ({
     value: Number(value),
     label,
   }));
 
-  readonly addTodo = output<TodoFormPayload>();
-
   readonly form: FormGroup<TodoFormValue> = this.#fb.group({
-    [TodoFormField.TITLE]: ['', [Validators.required, Validators.maxLength(this.titleMaxLength), noWhitespaceOnly]],
-    [TodoFormField.PRIORITY]: [DEFAULT_PRIORITY],
+    [this.field.TITLE]: ['', [Validators.required, Validators.maxLength(this.titleMaxLength), noWhitespaceOnly]],
+    [this.field.PRIORITY]: [DEFAULT_PRIORITY],
   });
 
   onSubmit(): void {
