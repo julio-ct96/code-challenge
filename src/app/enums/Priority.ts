@@ -5,3 +5,9 @@ export const Priority = {
 } as const satisfies Record<string, number>;
 
 export type Priority = (typeof Priority)[keyof typeof Priority];
+
+export const PriorityLabel: Record<Priority, string> = {
+  [Priority.LOW]: 'LOW',
+  [Priority.MEDIUM]: 'MEDIUM',
+  [Priority.HIGH]: 'HIGH',
+} as const;

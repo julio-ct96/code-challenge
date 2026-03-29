@@ -25,7 +25,10 @@
       "@enums/*": ["src/app/enums/*"],
       "@interfaces/*": ["src/app/interfaces/*"],
       "@services/*": ["src/app/services/*"],
-      "@components/*": ["src/app/components/*"]
+      "@components/*": ["src/app/components/*"],
+      "@mocks/*": ["src/app/mocks/*"],
+      "@validators/*": ["src/app/validators/*"],
+      "@constants/*": ["src/app/constants/*"]
     }
   },
   "angularCompilerOptions": {
