@@ -86,4 +86,29 @@ describe('TodoListComponent', () => {
       expect(service.todos()[0].completed).toBe(true);
     });
   });
+
+  describe('deleteTodo wiring', () => {
+    let itemDebugElement: DebugElement;
+
+    beforeEach(() => {
+      const formComponent: TodoForm = fixture.debugElement.query(By.css('[data-testid="todo-form"]')).componentInstance;
+      formComponent.addTodo.emit(buildTodoFormPayloadMock());
+      fixture.detectChanges();
+      itemDebugElement = fixture.debugElement.query(By.css('[data-testid="todo-item"]'));
+    });
+
+    it('should delete a todo when todo-item emits delete', () => {
+      const itemComponent: TodoItemComponent = itemDebugElement.componentInstance;
+
+      expect(service.todos().length).toBe(1);
+
+      itemComponent.delete.emit(service.todos()[0].id);
+      fixture.detectChanges();
+
+      expect(service.todos().length).toBe(0);
+
+      const items = fixture.nativeElement.querySelectorAll('[data-testid="todo-item"]');
+      expect(items.length).toBe(0);
+    });
+  });
 });
