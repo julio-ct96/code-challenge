@@ -2,13 +2,13 @@ import { DebugElement } from '@angular/core';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { of } from 'rxjs';
 import { TodoApi } from '@api/services/todo-api';
 import { TodoFilter as TodoFilterEnum } from '@enums/TodoFilter';
 import { Todo } from '@interfaces/Todo';
 import { buildApiResponseMock } from '@mocks/api-response';
 import { buildTodoFormPayloadMock } from '@mocks/todo-form-payload';
 import { TodoService } from '@services/todo.service';
+import { of } from 'rxjs';
 import { TodoFilter } from './components/todo-filter/todo-filter';
 import { TodoForm } from './components/todo-form/todo-form';
 import { TodoItemComponent } from './components/todo-item/todo-item';
@@ -23,6 +23,9 @@ describe('TodoListComponent', () => {
     TestBed.configureTestingModule({
       imports: [TodoListComponent],
       providers: [
+        // aqui a la horad de proveer mocks es mas seguro usar un useFactory para evitar 
+        // que si el se muta un mock en un test, este no afecte a otros tests, aunque para el mock ya nos estemos asegurando
+        // utilizando una funcion build que siempre devuelve el mismo estado inicial
         { provide: TodoApi, useFactory: () => ({ loadTodos: () => of(buildApiResponseMock<Todo[]>()) }) },
       ],
     });
