@@ -8,7 +8,9 @@
   <app-todo-form data-testid="todo-form" (addTodo)="onAddTodo($event)" />
   <app-todo-filter data-testid="todo-filter" [activeFilter]="activeFilter()" (filterChange)="onFilterChange($event)" />
 
-  @for (todo of filteredTodos(); track todo.id + todo.title) {
-    <app-todo-item data-testid="todo-item" [todo]="todo" (toggle)="onToggle($event)" (delete)="onDelete($event)" />
-  }
+  <div class="flex-1 min-h-0 overflow-y-auto pr-4">
+    @for (todo of filteredTodos(); track todo.id + todo.title) {
+      <app-todo-item data-testid="todo-item" [todo]="todo" (toggle)="onToggle($event)" (delete)="onDelete($event)" />
+    }
+  </div>
 }
