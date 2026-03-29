@@ -7,6 +7,7 @@ import { PriorityLabel } from '@enums/Priority';
   imports: [],
   templateUrl: './todo-item.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { role: 'listitem', class: 'flex items-center gap-4 p-2' },
 })
 export class TodoItemComponent {
   readonly todo = input.required<Todo>();
