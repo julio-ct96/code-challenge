@@ -19,6 +19,8 @@ export class TodoListComponent {
   readonly todos = this.#todoService.todos;
   readonly filteredTodos = this.#todoService.filteredTodos;
   readonly activeFilter = this.#todoService.filter;
+  readonly isLoadingTodos = this.#todoService.isLoadingTodos;
+  readonly todosError = this.#todoService.todosError;
 
   readonly heading = computed(() => {
     const filtered = this.filteredTodos().length;

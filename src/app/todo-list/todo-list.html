@@ -1,8 +1,14 @@
 <h2 class="mb-4">{{ heading() }}</h2>
 
-<app-todo-form data-testid="todo-form" (addTodo)="onAddTodo($event)" />
-<app-todo-filter data-testid="todo-filter" [activeFilter]="activeFilter()" (filterChange)="onFilterChange($event)" />
+@if (isLoadingTodos()) {
+  <p data-testid="loading-indicator" class="text-center text-gray-500 py-8">Loading todos...</p>
+} @else if (todosError()) {
+  <p data-testid="error-message" class="text-center text-red-500 py-8">{{ todosError() }}</p>
+} @else {
+  <app-todo-form data-testid="todo-form" (addTodo)="onAddTodo($event)" />
+  <app-todo-filter data-testid="todo-filter" [activeFilter]="activeFilter()" (filterChange)="onFilterChange($event)" />
 
-@for (todo of filteredTodos(); track todo.id + todo.title) {
-  <app-todo-item data-testid="todo-item" [todo]="todo" (toggle)="onToggle($event)" (delete)="onDelete($event)" />
+  @for (todo of filteredTodos(); track todo.id + todo.title) {
+    <app-todo-item data-testid="todo-item" [todo]="todo" (toggle)="onToggle($event)" (delete)="onDelete($event)" />
+  }
 }
