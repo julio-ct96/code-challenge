@@ -42,4 +42,8 @@ export class TodoListComponent {
   onDelete(id: string): void {
     this.#todoService.deleteTodo(id);
   }
+
+  onFilterChange(filter: TodoFilterEnum): void {
+    this.#todoService.setFilter(filter);
+  }
 }
