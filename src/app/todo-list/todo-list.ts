@@ -38,4 +38,8 @@ export class TodoListComponent {
   onToggle(id: string): void {
     this.#todoService.toggleTodo(id);
   }
+
+  onDelete(id: string): void {
+    this.#todoService.deleteTodo(id);
+  }
 }
