@@ -3,7 +3,7 @@
     data-testid="filter-button"
     [attr.aria-pressed]="activeStates()[filter]"
     (click)="onFilterClick(filter)"
-    class="rounded px-3 py-1.5 text-sm font-medium"
+    class="rounded px-3 py-1.5 text-sm font-medium hover:cursor-pointer"
     [class.bg-blue-500]="activeStates()[filter]"
     [class.text-white]="activeStates()[filter]"
     [class.bg-gray-200]="!activeStates()[filter]"
