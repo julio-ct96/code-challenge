@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()" class="flex items-center gap-4 p-2">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" aria-label="Add a new task" class="flex items-center gap-4 p-2">
   <input
     type="text"
     [formControlName]="field.TITLE"
@@ -28,6 +28,7 @@
   <button
     type="submit"
     data-testid="todo-submit"
+    aria-label="Add task"
     [disabled]="form.invalid"
     class="rounded bg-blue-500 px-4 py-1.5 text-white hover:bg-blue-600 disabled:opacity-50"
   >
