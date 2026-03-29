@@ -19,6 +19,8 @@ import { TodoItemComponent } from './components/todo-item/todo-item';
   changeDetection: ChangeDetectionStrategy.OnPush,
   // utilizo el atributo host para evitar wrappers innecesarios en el dom
   // y poder aplicar estilos directamente al componente
+  // tambien agrego el role main porque en esta app, que no tiene routing, este componente principal se comporta como main
+  // ojo solo puede haber un main por pagina
   host: { role: 'main', class: 'flex flex-col w-full max-w-2xl flex-1 min-h-0' },
 })
 export class TodoListComponent {
