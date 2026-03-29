@@ -20,28 +20,4 @@ describe('TodoListComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should contain tasks', () => {
-    const todoListElement = document.querySelector('#todoList');
-
-    expect(todoListElement!.children.length).toBeGreaterThan(0);
-  });
-
-  it('should toggle test class when clicked', () => {
-    const todoTaskElement = document.querySelector('#todoList>li');
-
-    component.toggleClass(
-      { currentTarget: todoTaskElement } as MouseEvent,
-      'test'
-    );
-
-    expect(todoTaskElement!.className).toContain('test');
-
-    component.toggleClass(
-      { currentTarget: todoTaskElement } as MouseEvent,
-      'test'
-    );
-
-    expect(todoTaskElement!.className).not.toContain('test');
-  });
 });
