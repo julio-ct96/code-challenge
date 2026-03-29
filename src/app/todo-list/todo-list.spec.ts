@@ -1,8 +1,10 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { TodoFilter as TodoFilterEnum } from '@enums/TodoFilter';
 import { buildTodoFormPayloadMock } from '@mocks/todo-form-payload';
 import { TodoService } from '@services/todo.service';
+import { TodoFilter } from './components/todo-filter/todo-filter';
 import { TodoForm } from './components/todo-form/todo-form';
 import { TodoItemComponent } from './components/todo-item/todo-item';
 import { TodoListComponent } from './todo-list';
@@ -108,6 +110,25 @@ describe('TodoListComponent', () => {
 
       const items = fixture.nativeElement.querySelectorAll('[data-testid="todo-item"]');
       expect(items.length).toBe(0);
+    });
+  });
+
+  describe('filterChange wiring', () => {
+    let filterDebugElement: DebugElement;
+
+    beforeEach(() => {
+      filterDebugElement = fixture.debugElement.query(By.css('[data-testid="todo-filter"]'));
+    });
+
+    it('should update service filter when filter emits filterChange', () => {
+      const filterComponent: TodoFilter = filterDebugElement.componentInstance;
+
+      expect(service.filter()).toBe(TodoFilterEnum.ALL);
+
+      filterComponent.filterChange.emit(TodoFilterEnum.COMPLETED);
+      fixture.detectChanges();
+
+      expect(service.filter()).toBe(TodoFilterEnum.COMPLETED);
     });
   });
 });
