@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { buildTodoFormPayloadMock } from '@mocks/todo-form-payload';
 import { TodoService } from '@services/todo.service';
 import { TodoForm } from './components/todo-form/todo-form';
+import { TodoItemComponent } from './components/todo-item/todo-item';
 import { TodoListComponent } from './todo-list';
 
 describe('TodoListComponent', () => {
@@ -60,6 +61,28 @@ describe('TodoListComponent', () => {
 
       const items = fixture.nativeElement.querySelectorAll('[data-testid="todo-item"]');
       expect(items.length).toBe(1);
+    });
+  });
+
+  describe('toggleTodo wiring', () => {
+    let itemDebugElement: DebugElement;
+
+    beforeEach(() => {
+      const formComponent: TodoForm = fixture.debugElement.query(By.css('[data-testid="todo-form"]')).componentInstance;
+      formComponent.addTodo.emit(buildTodoFormPayloadMock());
+      fixture.detectChanges();
+      itemDebugElement = fixture.debugElement.query(By.css('[data-testid="todo-item"]'));
+    });
+
+    it('should toggle a todo when todo-item emits toggle', () => {
+      const itemComponent: TodoItemComponent = itemDebugElement.componentInstance;
+
+      expect(service.todos()[0].completed).toBe(false);
+
+      itemComponent.toggle.emit(service.todos()[0].id);
+      fixture.detectChanges();
+
+      expect(service.todos()[0].completed).toBe(true);
     });
   });
 });
