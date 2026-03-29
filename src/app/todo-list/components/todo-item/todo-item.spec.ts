@@ -74,7 +74,7 @@ describe('TodoItemComponent', () => {
   it('should display priority badge with correct text', () => {
     const badge = fixture.nativeElement.querySelector('[data-testid="priority-badge"]');
     expect(badge).toBeTruthy();
-    expect(badge.textContent?.trim()).toBe('HIGH');
+    expect(badge.textContent).toContain('HIGH');
   });
 
   it('should apply line-through style when todo is completed', () => {

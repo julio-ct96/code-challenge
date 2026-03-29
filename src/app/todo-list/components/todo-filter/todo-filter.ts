@@ -9,8 +9,8 @@ import { TodoFilter as TodoFilterEnum } from '@enums/TodoFilter';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'flex items-center gap-2 p-2',
-    role: 'group',
-    'aria-label': 'Filter tasks',
+    role: 'toolbar',
+    'aria-label': 'Filter todos',
   },
 })
 export class TodoFilter {
