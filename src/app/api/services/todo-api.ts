@@ -21,6 +21,11 @@ export class TodoApi {
   // en un ApiResponse, en el servicio hago un toSignal para poder sacar computadas/linked
   // de los 3 estados, data, load y error, esto me permite
   // desacoplar el componente de la interfaz de ApiResponse
+
+  // tambien como mejora aqui se podria crear un operador para reutilizar el codigo de la gestion de estado en todos los metodos http
+  // o crear una clase en la que encapsulemos la logica de la gestion de estado para que todos los servicios que vayan a usar http 
+  // tengan esa funcionalidad de manera automatica, expondriamos nuestros propios metodos http, 
+  // y esa seria la unica clase que inyectaria  el HttpClient en principio, como siempre, todo depende de las necesidades del proyecto
   loadTodos(): Observable<ApiResponse<Todo[]>> {
     return this.#http.get<TodoApiResponseDto>(this.#apiUrl).pipe(
       map(response => ({
